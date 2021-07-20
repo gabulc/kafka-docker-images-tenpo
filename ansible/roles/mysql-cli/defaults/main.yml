@@ -1,0 +1,11 @@
+---
+# Versions
+mysql_version: ''
+mysql_package: "mysql-client"
+mysql_package_state: present
+
+# Used only for Debian/Ubuntu. Switch 'stable' to 'edge' if needed.
+mysql_apt_arch: amd64
+mysql_apt_release_channel: main
+mysql_apt_repository: "deb [arch={{ mysql_apt_arch }}] http://repo.mysql.com/apt/{{ ansible_distribution|lower }}/ {{ ansible_distribution_release }} mysql-8.0"
+mysql_apt_ignore_key_error: true

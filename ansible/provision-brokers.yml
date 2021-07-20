@@ -1,0 +1,31 @@
+---
+- hosts: brokers
+  tasks:
+  - ec2_metadata_facts:
+
+
+- hosts: brokers
+  become: yes
+  vars:
+    manage_lvm: true
+    data_dir: "/data"
+    apps_dir: "/opt"
+    kafka_zk_servers: "{{ groups['brokers'] 
+      | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
+      | join(':2181,') }}:2181"
+  vars_files:
+    - lvm-brokers.yml
+    - pipeset_users.yml
+
+
+  roles:
+    - base
+    - mrlesmithjr.manage-lvm
+    - geerlingguy.docker
+    - add-accounts
+    - role: git-deploy
+      repo_url: "git+ssh://git@dbms/home/git/kafka-docker-images.git"
+      repo_app_dir: "kafka"
+      repo_version: "2.8"
+      app_dir: "/opt/kafka"
+

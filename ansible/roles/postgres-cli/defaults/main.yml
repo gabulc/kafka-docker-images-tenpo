@@ -1,0 +1,11 @@
+---
+# Versions
+postgres_version: '12'
+postgres_package: "postgresql-client-{{ postgres_version }}"
+postgres_package_state: present
+
+# Used only for Debian/Ubuntu. Switch 'stable' to 'edge' if needed.
+postgres_apt_arch: amd64
+postgres_apt_release_channel: main
+postgres_apt_repository: "deb [arch={{ postgres_apt_arch }}] http://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg {{ postgres_apt_release_channel }}"
+postgres_apt_ignore_key_error: true

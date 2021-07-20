@@ -1,0 +1,44 @@
+[all:vars]
+docker_registry=promise
+docker_registry_port=5000
+kafka_image=krealo/kafka:2.6-alpine-zulu-0.9
+kafka_connect_image=krealo/kafka-connect:2.6-alpine-zulu-0.9
+zookeeper_image=krealo/zookeeper:3.6-alpine-zulu-0.9
+
+[dbms_nodes]
+dbms
+dbms-2
+
+[web_services]
+bi
+promise
+
+[analysis_nodes]
+promise
+
+[brokers]
+zk-k1 zookeeper_id=1 kafka_id=0
+zk-k2 zookeeper_id=2 kafka_id=1
+zk-k3 zookeeper_id=3 kafka_id=2
+
+[broker_adapters]
+ba-1
+ba-2
+
+[broker_producers]
+ba-1
+
+[broker_consumers]
+ba-2
+
+[controllers]
+ctrl-1
+
+[schema_registries]
+ba-1
+
+[certificate_authority]
+ca-1
+
+[olp_brokers]
+olp-1

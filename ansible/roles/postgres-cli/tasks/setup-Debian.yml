@@ -1,0 +1,32 @@
+---
+- name: Ensure old versions of Postgres are not installed.
+  package:
+    name:
+      - postgresql-client-12
+    state: absent
+
+- name: Add PG12 apt key.
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    id: B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+    state: present
+  register: add_repository_key
+  ignore_errors: "{{ postgres_apt_ignore_key_error }}"
+
+- name: Ensure curl is present (on older systems without SNI).
+  package: name=curl state=present
+  when: add_repository_key is failed
+
+- name: Add Postgres apt key (alternative for older systems without SNI).
+  shell: |
+    set -o pipefail
+    curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+  args:
+    warn: false
+  when: add_repository_key is failed
+
+- name: Add Postgres repository.
+  apt_repository:
+    repo: "{{ postgres_apt_repository }}"
+    state: present
+    update_cache: true

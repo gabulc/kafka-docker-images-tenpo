@@ -1,0 +1,18 @@
+lvm_groups:
+  - vgname: data
+    disks:
+      - /dev/nvme1n1
+    create: true
+    lvnames:
+      - lvname: data
+        size: 230G
+        create: true
+        filesystem: ext4
+        mount: true
+        mntp: "{{ data_dir }}"
+      - lvname: app
+        size: 100%FREE
+        create: true
+        filesystem: ext4
+        mount: true
+        mntp: "{{ apps_dir }}"

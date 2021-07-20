@@ -1,0 +1,30 @@
+lvm_groups:
+  - vgname: data
+    disks:
+      - /dev/nvme1n1
+    create: true
+    lvnames:
+      - lvname: db
+        size: 870400
+        # size: 100%FREE
+        create: true
+        filesystem: ext4
+        mount: true
+        mntp: "{{ data_dir }}"
+  - vgname: apps
+    disks:
+      - /dev/nvme2n1
+    create: true
+    lvnames:
+      - lvname: opt
+        size: 10240
+        create: true
+        filesystem: ext4
+        mount: true
+        mntp: "{{ apps_dir }}"
+      - lvname: home
+        size: 100%FREE
+        create: true
+        filesystem: ext4
+        mount: true
+        mntp: "{{ home_dir }}"

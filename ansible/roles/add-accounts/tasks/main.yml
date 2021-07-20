@@ -1,0 +1,25 @@
+- block:
+  - name: "Create groups"
+    group:
+      name: "{{ item.name }}"
+      state: "present"
+    with_items: "{{ aa_groups }}"
+
+  - name: "Create users, generate ed25519 keys, and add groups to users"
+    user:
+      name: "{{ item.username }}"
+      groups: "{{ item.groups }}"
+      state: "present"
+      generate_ssh_key: "yes"
+      ssh_key_type: "ed25519"
+      ssh_key_file: ".ssh/id_ed25519"
+      append: "yes"
+    with_items: "{{ aa_users }}"
+
+  - name: "Add authorized keys"
+    authorized_key:
+      user: "{{ item.username }}"
+      key: "{{ lookup('file',  (file_dir | default(playbook_dir + '/files/')) + item.username + '.key.pub', errors='warn') }}"
+    with_items: "{{ aa_users }}"
+    when: not ansible_check_mode
+  when: users is not none

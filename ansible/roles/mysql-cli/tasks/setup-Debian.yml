@@ -1,0 +1,20 @@
+---
+- name: Ensure old versions of MySQL are not installed
+  package:
+    name:
+      - mysql-client
+    state: absent
+
+- name: Add MySQL apt key
+  apt_key:
+    keyserver: pgp.mit.edu
+    id: 5072E1F5
+    state: present
+  register: add_repository_key
+  ignore_errors: "{{ mysql_apt_ignore_key_error }}"
+
+- name: Add Postgres repository
+  apt_repository:
+    repo: "{{ mysql_apt_repository }}"
+    state: present
+    update_cache: true

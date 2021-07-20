@@ -1,0 +1,11 @@
+- name: add public keys
+  authorized_key:
+    user: "{{ item.username }}"
+    key: "{{ item.ssh_keys }}"
+  delegate_to: "{{ delegated_host }}"
+  become: yes
+  with_items: "{{ auth_keys_job }}"
+  loop_control:
+    index_var: my_idx
+  when: not ansible_check_mode
+  ignore_errors: yes

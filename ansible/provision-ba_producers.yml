@@ -1,0 +1,32 @@
+---
+- hosts: brokers,schema_registries
+
+
+- hosts: broker_producers
+  become: yes
+  vars:
+    manage_lvm: true
+    data_dir: "/data"
+    apps_dir: "/opt"
+    connect_group_id: "1"
+    connect_topic_prefix: "cp"
+    connect_kafka_servers: "{{ groups['brokers']
+      | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
+      | join(':9092,') }}:9092"
+    connect_schema_registry: "{{ groups['schema_registries']
+      | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
+      | join(',') }}"
+  vars_files:
+    - lvm-broker_adapters.yml
+    - pipeset_users.yml
+
+  roles:
+    - base
+    - mrlesmithjr.manage-lvm
+    - geerlingguy.docker
+    - add-accounts
+    - role: git-deploy
+      repo_url: "git+ssh://git@dbms/home/git/kafka-alpine.git"
+      repo_app_dir: "kafka-connect"
+      app_dir: "/opt/kafka-connect"
+      repo_version: "2.8"

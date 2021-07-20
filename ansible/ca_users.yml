@@ -1,0 +1,6 @@
+aa_groups:
+- name: "cert_auth"
+
+aa_users:
+- username: "ca"
+  groups: "cert_auth,docker"

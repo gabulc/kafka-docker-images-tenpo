@@ -1,0 +1,47 @@
+---
+- hosts: all
+
+- hosts: controllers
+  become: yes
+  vars_files:
+    - pipeset_users.yml
+
+  roles:
+    - base
+    - geerlingguy.docker
+    - postgres-cli
+    - add-accounts
+    - mysql-cli
+#     - scriptella #docker dependant
+#     - ebs-snapshoter #docker dependant
+
+  tasks:
+  - block:
+    - name: Fetch public keys
+      shell: "cat /home/{{ item.username }}/.ssh/id_ed25519.pub"
+      register: ssh_keys
+      with_items: "{{ users }}"
+    - set_fact:
+        auth_keys_job: "{{ auth_keys_job | default([]) + [{
+          'username': item.username,
+          'groups': item.groups,
+          'ssh_keys': ssh_keys.results[my_idx].stdout }] }}"
+      with_items: "{{ users }}"
+      loop_control:
+        index_var: my_idx
+
+  - name: Add public keys into all inventory
+    include_tasks: add_auth_keys_delegate.yml
+    loop: "{{ groups.all }}"
+    loop_control:
+      loop_var: delegated_host
+    when: not (delegated_host == 'localhost') and not (ansible_hostname == delegated_host)
+
+  - name: Add IP address of all inventory
+    lineinfile:
+      dest: /etc/hosts
+      regexp: '.*{{ item }}$'
+      line: "{{ hostvars[item].ansible_default_ipv4.address }} {{item}}"
+      state: present
+    with_items: "{{ groups.all }}"
+    when: hostvars[item].ansible_default_ipv4.address is defined and not (ansible_hostname == item)

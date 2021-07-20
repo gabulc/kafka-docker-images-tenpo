@@ -1,0 +1,54 @@
+# App deploy from a git repo
+# --------------------------
+- block:
+    - name: "Create temp dir for locally clone app repo"
+      tempfile:
+        state: directory
+        prefix: git
+      register: local_repo_dir
+    - name: "locally clone app repo"
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ local_repo_dir.path }}/repo"
+        accept_hostkey: yes
+        version: "{{ repo_version | default('HEAD') }}"
+    - name: "archive app repo"
+      command:
+        cmd: >
+          git archive --output {{ local_repo_dir.path }}/{{ archive_filename }}
+          {{ repo_version | default(repo_branch) }}
+        chdir: "{{ local_repo_dir.path }}/repo/{{ repo_app_dir }}"
+  become: no
+  delegate_to: localhost
+  run_once: true
+
+- name: "Change permissions"
+  file:
+    path: "{{ app_dir }}"
+    group: pipeset
+    state: directory
+    mode: 'u=rwx,g=rwx,g+s'
+
+- name: "Copy app to host"
+  unarchive:
+    src: "{{ local_repo_dir.path }}/{{ archive_filename }}"
+    dest: "{{ app_dir }}"
+    owner: ubuntu
+    group: pipeset
+    # mode: 'u=rw,g=rw'
+
+- name: "Setting up docker-compose.yml"
+  template:
+    src: "{{ local_repo_dir.path }}/repo/{{ repo_app_dir }}/docker-compose.yml.j2"
+    dest: "{{ app_dir }}/docker-compose.yml"
+    owner: ubuntu
+    group: pipeset
+    mode: 'u=rw,g=rw'
+
+- name: "Remove temp dir"
+  file:
+    path: "{{ local_repo_dir.path }}"
+    state: absent
+  become: no
+  delegate_to: localhost
+

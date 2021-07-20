@@ -1,0 +1,40 @@
+[all:vars]
+docker_registry=ctrl-1
+docker_registry_port=5000
+kafka_image=krealo/kafka:2.8-alpine-zulu-0.9
+kafka_connect_image=krealo/kafka-connect:2.8-alpine-zulu-0.9
+zookeeper_image=krealo/zookeeper:3.7-alpine-zulu-0.9
+
+[dbms_nodes]
+dev-dbms
+
+[web_services]
+#dev-bi
+dev-promise
+
+#[analysis_nodes]
+#dev-promise
+
+[brokers]
+dev-zk-k1 zookeeper_id=1 kafka_id=0
+dev-zk-k2 zookeeper_id=2 kafka_id=1
+dev-zk-k3 zookeeper_id=3 kafka_id=2
+
+[broker_adapters]
+dev-ba-1
+dev-ba-2
+
+[broker_producers]
+dev-ba-1
+
+[broker_consumers]
+dev-ba-2
+
+[controllers]
+dev-ctrl-1
+
+[schema_registries]
+dev-ba-1
+
+[certificate_authority]
+ca-1

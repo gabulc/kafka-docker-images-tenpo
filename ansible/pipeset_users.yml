@@ -1,0 +1,20 @@
+aa_groups:
+- name: "pipeset"
+
+aa_users:
+- username: "eder"
+  groups: "pipeset,docker"
+- username: "nelson"
+  groups: "pipeset,docker"
+- username: "diego"
+  groups: "pipeset,docker"
+- username: "gabriel"
+  groups: "pipeset,docker"
+- username: "andre"
+  groups: "pipeset,docker"
+- username: "ronie"
+  groups: "pipeset,docker"
+- username: "guillermo"
+  groups: "pipeset,docker"
+- username: "ubuntu"
+  groups: "pipeset,docker"

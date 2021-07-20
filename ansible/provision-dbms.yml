@@ -1,0 +1,20 @@
+---
+- hosts: dbms_nodes
+  become: yes
+  vars:
+    manage_lvm: true
+    data_dir: "/data"
+    apps_dir: "/opt"
+    home_dir: "/new-home"
+  vars_files:
+    - pipeset_users.yml
+    - lvm-dbms.yml
+
+  roles:
+#     - base
+#     - geerlingguy.docker
+#     - postgres-cli
+#     - add-accounts
+#     - mysql-cli
+    - mrlesmithjr.manage-lvm
+
