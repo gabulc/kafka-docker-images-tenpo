@@ -1,0 +1,4 @@
+#!/usr/bin/env bash 
+ 
+echo installing ansible roles... 
+ansible-galaxy install mrlesmithjr.manage-lvm geerlingguy.docker

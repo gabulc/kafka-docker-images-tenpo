@@ -22,7 +22,7 @@
     - base
     - mrlesmithjr.manage-lvm
     - geerlingguy.docker
-    - add-accounts
+    #- add-accounts
     - role: git-deploy
       repo_url: "git+ssh://git@dbms/home/git/kafka-docker-images.git"
       repo_app_dir: "kafka"
