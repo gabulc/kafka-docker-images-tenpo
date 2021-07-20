@@ -1,0 +1,3 @@
+[submodule "kafka-docker-images"]
+	path = kafka-docker-images
+	url = https://github.com/grebaza/kafka-docker-images.git
