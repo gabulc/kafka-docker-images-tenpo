@@ -28,13 +28,13 @@ echo "Creating table."
 psql "$PSQL_CONN" <<EOF
   DROP TABLE IF EXISTS ${DB_TABLE_NAME};
   CREATE TABLE ${DB_TABLE_NAME}(
-    "index" varchar(10), 
-    "date" date, 
-    "open" float null, 
-    high float null, 
-    low float null, 
-    "close" float null, 
-    adj_close float null, 
+    "index" varchar(10),
+    "date" date,
+    "open" float null,
+    high float null,
+    low float null,
+    "close" float null,
+    adj_close float null,
     volume float null
   );
 EOF
