@@ -1,0 +1,19 @@
+{
+  "name": "pg11-test-tenpo",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "",
+    "database.port": "",
+    "database.user": "",
+    "database.password": "",
+    "database.sslmode": "require",
+    "database.dbname" : "",
+    "database.server.name": "xxxxx", 
+    "table.whitelist": "public.transaction_test1,public.transaction_test2,public.transaction_test3",
+    "database.history.kafka.bootstrap.servers": "",
+    "database.history.kafka.topic": "dbhistory.xxxxx",
+    "plugin.name": "pgoutput",
+    "publication.autocreate.mode": "filtered"
+  }
+}
