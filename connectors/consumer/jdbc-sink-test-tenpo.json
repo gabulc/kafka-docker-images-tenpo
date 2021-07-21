@@ -12,7 +12,7 @@
     "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
     "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
     "transforms.route.replacement": "$3",
-    "connection.url": "jdbc:postgresql://${file:/secrets/pg12.properties:host}:${file:/secrets/pg12.properties:port}/clq?currentSchema=test&user=${file:/secrets/pg12.properties:user}&password=${file:/secrets/pg12.properties:password}",
+    "connection.url": "jdbc:postgresql://${file:/secrets/pg12.properties:host}:${file:/secrets/pg12.properties:port}/${file:/secrets/pg12.properties:dbname}?currentSchema=${file:/secrets/pg12.properties:schema}&user=${file:/secrets/pg12.properties:user}&password=${file:/secrets/pg12.properties:password}",
     "db.timezone": "America/Lima",
     "delete.enabled": "true",
     "auto.create": "true",
